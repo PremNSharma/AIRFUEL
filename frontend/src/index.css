@@ -1,0 +1,334 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Custom CSS Variables ─────────────────────────────── */
+:root {
+  --color-primary: #6366f1;
+  --color-primary-dark: #4f46e5;
+  --color-accent: #0ea5e9;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --sidebar-width: 260px;
+  --header-height: 64px;
+}
+
+/* ── Base Styles ──────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-dark-950 text-slate-100 font-sans antialiased;
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, rgba(14, 165, 233, 0.06) 0%, transparent 50%);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-dark-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark-500;
+  }
+}
+
+/* ── Glassmorphism Components ─────────────────────────── */
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  .glass-card {
+    @apply glass rounded-2xl p-6 transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply bg-white/8 border-white/20;
+    box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .glass-sidebar {
+    @apply bg-dark-950/80 backdrop-blur-xl border-r border-white/5;
+  }
+
+  .btn-primary {
+    @apply relative overflow-hidden px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
+    background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-all duration-200;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 rounded-xl text-white font-medium transition-all duration-200;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-100 placeholder-slate-500;
+    @apply focus:outline-none focus:border-aviation-500/60 focus:ring-2 focus:ring-aviation-500/20 transition-all duration-200;
+  }
+
+  .input-label {
+    @apply block text-sm font-medium text-slate-400 mb-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30;
+  }
+
+  .badge-warning {
+    @apply badge bg-amber-500/20 text-amber-400 border border-amber-500/30;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-500/20 text-red-400 border border-red-500/30;
+  }
+
+  .badge-info {
+    @apply badge bg-blue-500/20 text-blue-400 border border-blue-500/30;
+  }
+
+  .badge-purple {
+    @apply badge bg-purple-500/20 text-purple-400 border border-purple-500/30;
+  }
+
+  /* KPI Card */
+  .kpi-card {
+    @apply glass-card relative overflow-hidden cursor-default;
+  }
+
+  .kpi-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  }
+
+  .kpi-card:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
+  }
+
+  .gradient-text-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  }
+
+  /* Sidebar nav link */
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 font-medium transition-all duration-200;
+  }
+
+  .nav-link:hover {
+    @apply text-white bg-white/8;
+  }
+
+  .nav-link.active {
+    @apply text-white;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(14, 165, 233, 0.2) 100%);
+    border-left: 3px solid #6366f1;
+  }
+
+  /* Data table */
+  .data-table {
+    @apply w-full text-sm;
+  }
+
+  .data-table thead tr {
+    @apply border-b border-white/10;
+  }
+
+  .data-table th {
+    @apply text-left py-3 px-4 text-slate-400 font-medium uppercase tracking-wider text-xs;
+  }
+
+  .data-table td {
+    @apply py-3 px-4 text-slate-300 border-b border-white/5;
+  }
+
+  .data-table tbody tr:hover {
+    @apply bg-white/5;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply w-full bg-dark-800 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+  }
+
+  /* Section header */
+  .section-header {
+    @apply flex items-center gap-3 mb-6;
+  }
+
+  .section-icon {
+    @apply w-10 h-10 rounded-xl flex items-center justify-center text-white;
+    background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+  }
+
+  /* Animated gradient border */
+  .gradient-border {
+    position: relative;
+    border-radius: 16px;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    background: linear-gradient(135deg, #6366f1, #0ea5e9, #10b981, #6366f1);
+    background-size: 300% 300%;
+    animation: gradientShift 4s ease infinite;
+    z-index: -1;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Shimmer loading */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+    @apply bg-dark-800/60 rounded-xl;
+  }
+
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Glow effects */
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.2);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), 0 0 40px rgba(16, 185, 129, 0.2);
+  }
+
+  .glow-amber {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 0 40px rgba(245, 158, 11, 0.2);
+  }
+
+  /* Recharts custom styles */
+  .recharts-cartesian-grid-horizontal line,
+  .recharts-cartesian-grid-vertical line {
+    stroke: rgba(255, 255, 255, 0.06);
+  }
+
+  .recharts-tooltip-wrapper {
+    @apply !rounded-xl !overflow-hidden;
+  }
+}
+
+/* ── Utility overrides ─────────────────────────────────── */
+@layer utilities {
+  .bg-white\/8 {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .transition-all-300 {
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* ── Custom Animations ─────────────────────────────────── */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  80%, 100% { transform: scale(2); opacity: 0; }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* ── Page transitions ─────────────────────────────────── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+/* ── Recharts Tooltip ─────────────────────────────────── */
+.custom-tooltip {
+  @apply glass rounded-xl p-4 text-sm text-slate-200;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}

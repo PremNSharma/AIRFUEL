@@ -1,0 +1,92 @@
+version: "3.9"
+
+services:
+  # ── Backend API ────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    container_name: aircraft_fuel_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=sqlite+aiosqlite:///./database/aircraft_fuel.db
+      - MLFLOW_TRACKING_URI=/app/experiments/mlruns
+      - MODEL_SAVE_PATH=/app/models
+    volumes:
+      - ./database:/app/database
+      - ./models:/app/models
+      - ./experiments:/app/experiments
+      - ./data:/app/data
+    networks:
+      - aircraft_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ── Frontend Dashboard ─────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aircraft_fuel_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - aircraft_network
+    restart: unless-stopped
+
+  # ── MLflow Tracking Server ─────────────────────────────────
+  mlflow:
+    image: python:3.11-slim
+    container_name: aircraft_fuel_mlflow
+    working_dir: /mlflow
+    command: >
+      bash -c "pip install mlflow -q &&
+               mlflow server
+               --host 0.0.0.0
+               --port 5000
+               --backend-store-uri /mlflow/experiments/mlruns
+               --default-artifact-root /mlflow/experiments/artifacts"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./experiments:/mlflow/experiments
+    networks:
+      - aircraft_network
+    restart: unless-stopped
+
+  # ── Nginx Reverse Proxy ───────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: aircraft_fuel_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - aircraft_network
+    restart: unless-stopped
+    profiles:
+      - production
+
+networks:
+  aircraft_network:
+    driver: bridge
+
+volumes:
+  db_data:
+  mlflow_data:
