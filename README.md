@@ -54,4 +54,4 @@ Build a practical prediction system around aircraft fuel consumption while keepi
 
 **Prem Sharma**
 
-GitHub: https://github.com/premsharma8168
+GitHub: https://github.com/PremNSharma
